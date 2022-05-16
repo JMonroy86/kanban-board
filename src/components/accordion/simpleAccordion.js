@@ -21,6 +21,8 @@ import Filter8Icon from "@mui/icons-material/Filter8";
 import Filter9Icon from "@mui/icons-material/Filter9";
 import Filter9PlusIcon from "@mui/icons-material/Filter9Plus";
 import { Grid } from "@mui/material";
+import { SelectedListItem } from "../list/selectedList";
+import { tasksData } from "../../constants/services";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: "#fff0",
@@ -82,10 +84,19 @@ export const ControlledAccordions = () => {
                     <Typography
                       sx={{ color: "#fff", fontFamily: "Roboto Mono" }}
                     >
-                      Nulla facilisi. Phasellus sollicitudin nulla et quam
-                      mattis feugiat. Aliquam eget maximus est, id dignissim
-                      quam.
+                      To Do
                     </Typography>
+                    <SelectedListItem tasks={tasksData}/>
+                  </Item>
+                </Grid>
+                <Grid item xs={3}>
+                  <Item>
+                  <Typography
+                      sx={{ color: "#fff", fontFamily: "Roboto Mono" }}
+                    >
+                      Done
+                    </Typography>
+                    <SelectedListItem tasks={tasksData}/>
                   </Item>
                 </Grid>
                 <Grid item xs={3}>
@@ -93,10 +104,9 @@ export const ControlledAccordions = () => {
                     <Typography
                       sx={{ color: "#fff", fontFamily: "Roboto Mono" }}
                     >
-                      Nulla facilisi. Phasellus sollicitudin nulla et quam
-                      mattis feugiat. Aliquam eget maximus est, id dignissim
-                      quam.
+                      Blocked
                     </Typography>
+                    <SelectedListItem tasks={tasksData}/>
                   </Item>
                 </Grid>
                 <Grid item xs={3}>
@@ -104,21 +114,9 @@ export const ControlledAccordions = () => {
                     <Typography
                       sx={{ color: "#fff", fontFamily: "Roboto Mono" }}
                     >
-                      Nulla facilisi. Phasellus sollicitudin nulla et quam
-                      mattis feugiat. Aliquam eget maximus est, id dignissim
-                      quam.
+                      Rejected
                     </Typography>
-                  </Item>
-                </Grid>
-                <Grid item xs={3}>
-                  <Item>
-                    <Typography
-                      sx={{ color: "#fff", fontFamily: "Roboto Mono" }}
-                    >
-                      Nulla facilisi. Phasellus sollicitudin nulla et quam
-                      mattis feugiat. Aliquam eget maximus est, id dignissim
-                      quam.
-                    </Typography>
+                    <SelectedListItem tasks={tasksData}/>
                   </Item>
                 </Grid>
               </Grid>

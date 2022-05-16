@@ -39,3 +39,12 @@ export const rows = [
   { name: "India", email: "IN", photo: "https://i.pravatar.cc/150?img=2" },
   { name: "India", email: "IN", photo: "https://i.pravatar.cc/150?img=2" },
 ];
+
+
+export const tasksData = [
+  { name: "Menu", id: "01", createdBy: "JMonroy86", date: '13/02/2022' },
+  { name: "Menu", id: "01", createdBy: "JMonroy86", date: '13/02/2022' },
+  { name: "Menu", id: "01", createdBy: "JMonroy86", date: '13/02/2022' },
+  { name: "Menu", id: "01", createdBy: "JMonroy86", date: '13/02/2022' },
+  { name: "Menu", id: "01", createdBy: "JMonroy86", date: '13/02/2022' },
+]
