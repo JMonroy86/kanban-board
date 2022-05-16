@@ -1,5 +1,9 @@
-import { Login } from "../components/login";
+import { Admin } from "./admin/admin";
 
 export const Home = () => {
-  return <Login />;
+  return (
+    <>
+      <Admin />
+    </>
+  );
 };
