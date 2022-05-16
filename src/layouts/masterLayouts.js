@@ -1,32 +1,40 @@
-import React, { useContext } from 'react'
-import { Context } from '../store/appContext'
+import React, { useContext } from "react";
+import { Context } from "../store/appContext";
 
-import { Route, Redirect } from 'react-router-dom'
+import { Route, Navigate, Routes } from "react-router-dom";
+import { MainMenu } from "../components/menu/menu";
 
 const Master = ({ children }) => {
-    return <div>{children}</div>
-}
-const MasterRoute = ({ component: Component, ...others }) => {
-    const { store, actions } = useContext(Context)
+  return (
+    <div>
+      <MainMenu />
+      {children}
+    </div>
+  );
+};
+const MasterRoute = ({ element: Component, ...others }) => {
+  const { store, actions } = useContext(Context);
 
-    if (store.currentUser === null) {
-        const user = localStorage.getItem('auth')
-        if (user !== null) {
-            actions.revalidate(JSON.parse(user))
-        } else {
-            return <Redirect to="/" />
-        }
+  if (store.currentUser === null) {
+    const user = localStorage.getItem("auth");
+    if (user !== null) {
+      actions.revalidate(JSON.parse(user));
+    } else {
+      return <Navigate to="/" replace  />;
     }
-    return (
-        <Route
-            {...others}
-            render={props => (
-                <Master>
-                    <Component {...props} />
-                </Master>
-            )}
-        />
-    )
-}
+  }
+  return (
+    <Routes>
+      <Route
+        {...others}
+        render={(props) => (
+          <Master>
+            <Component {...props} />
+          </Master>
+        )}
+      />
+    </Routes>
+  );
+};
 
-export default MasterRoute
+export default MasterRoute;
