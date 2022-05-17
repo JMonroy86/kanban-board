@@ -2,15 +2,16 @@ import Grid from "@mui/material/Grid";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import UseFormControl from "../components/form/inputText";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { InputPassword } from "../components/form/inputPassword";
 import { LoadingButtonsTransition } from "../components/form/button";
 import { useNavigate } from "react-router-dom";
-
+import { Context } from "../store/appContext";
 
 const theme = createTheme({});
 
 export const Login = () => {
+  const { actions } = useContext(Context);
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [state, setState] = useState({
@@ -24,10 +25,10 @@ export const Login = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     setLoading(true);
-    console.log(state);
+    actions.register(state);
     setTimeout(function () {
       setLoading(false);
-      navigate("/dashboard/main")
+      navigate("/dashboard/main");
     }, 3000);
   };
   return (
@@ -46,7 +47,6 @@ export const Login = () => {
             <Grid
               container
               item
-              
               xs={6}
               md={12}
               marginBottom={4}
@@ -57,7 +57,7 @@ export const Login = () => {
                 alt=""
               />
             </Grid>
-            <Grid item  xs={6} md={12} marginBottom={4}>
+            <Grid item xs={6} md={12} marginBottom={4}>
               <UseFormControl
                 handleChange={handleChange}
                 inputName={"email"}
@@ -68,7 +68,7 @@ export const Login = () => {
                 textColor={"#fff"}
               />
             </Grid>
-            <Grid item  xs={6} md={12}>
+            <Grid item xs={6} md={12}>
               <InputPassword
                 handleChange={handleChange}
                 inputValue={state.password}
@@ -76,7 +76,11 @@ export const Login = () => {
               />
             </Grid>
             <Grid item sm={12} xs={12} md={12} marginTop={2}>
-              <LoadingButtonsTransition loading={loading} text={"Login"}  icon={'login'}/>
+              <LoadingButtonsTransition
+                loading={loading}
+                text={"Login"}
+                icon={"login"}
+              />
             </Grid>
           </Box>
         </Box>

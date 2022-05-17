@@ -43,7 +43,7 @@ export const rows = [
 
 export const tasksData = [
   { name: "Menu", id: "01", createdBy: "JMonroy86", date: '13/02/2022' },
-  { name: "Menu", id: "01", createdBy: "JMonroy86", date: '13/02/2022' },
+  { name: "Responsive", id: "01", createdBy: "JMonroy86", date: '13/02/2022' },
   { name: "Menu", id: "01", createdBy: "JMonroy86", date: '13/02/2022' },
   { name: "Menu", id: "01", createdBy: "JMonroy86", date: '13/02/2022' },
   { name: "Menu", id: "01", createdBy: "JMonroy86", date: '13/02/2022' },

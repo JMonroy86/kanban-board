@@ -16,17 +16,16 @@ export const SelectedListItem = ({ tasks }) => {
       <List component="nav" aria-label="secondary mailbox folder">
         {tasks.map((task, i) => {
           return (
-            <ListItemButton key={i}
+            <ListItemButton
+              key={i}
               selected={selectedIndex === i}
               onClick={(event) => handleListItemClick(event, i)}
             >
-              <ListItemText primary={task.name} secondary={task.id}  />
-              <ListItemText secondary={task.date}/>
-              
+              <ListItemText primary={task.name} secondary={task.id} />
+              <ListItemText primary={task.createdBy} secondary={task.date} />
             </ListItemButton>
           );
         })}
-        
       </List>
     </Box>
   );
