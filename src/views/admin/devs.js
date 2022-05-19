@@ -46,7 +46,7 @@ export const Devs = () => {
     <ThemeProvider theme={theme}>
       <Grid container spacing={1}>
         <Grid item xs={8}>
-          <Typography variant="h3">Devs Manager</Typography>
+          <Typography variant="h3">Users Manager</Typography>
         </Grid>
         <Grid item>
           <Item>

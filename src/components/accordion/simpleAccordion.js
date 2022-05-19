@@ -46,8 +46,9 @@ export const ControlledAccordions = () => {
       {store.devs.map((dev, i) => {
         return (
           <Accordion
-            expanded={expanded === `panel1${i}`}
-            onChange={handleChange(`panel1${i}`)}
+            key={dev.id}
+            expanded={expanded === `panel1${dev.id}`}
+            onChange={handleChange(`panel1${dev.id}`)}
             sx={{ backgroundColor: "#333" }}
           >
             <AccordionSummary
@@ -56,7 +57,7 @@ export const ControlledAccordions = () => {
               id="panel1bh-header"
             >
               <Typography sx={{ width: "7%", flexShrink: 0 }}>
-                <ImageAvatars url={dev.urlAvatar} width={40} height={40} />
+                <ImageAvatars url={dev.photo} width={50} height={50} />
               </Typography>
               <Typography
                 sx={{
@@ -86,17 +87,17 @@ export const ControlledAccordions = () => {
                     >
                       To Do
                     </Typography>
-                    <SelectedListItem tasks={tasksData}/>
+                    <SelectedListItem tasks={tasksData} />
                   </Item>
                 </Grid>
                 <Grid item xs={3}>
                   <Item>
-                  <Typography
+                    <Typography
                       sx={{ color: "#fff", fontFamily: "Roboto Mono" }}
                     >
                       Done
                     </Typography>
-                    <SelectedListItem tasks={tasksData}/>
+                    <SelectedListItem tasks={tasksData} />
                   </Item>
                 </Grid>
                 <Grid item xs={3}>
@@ -106,7 +107,7 @@ export const ControlledAccordions = () => {
                     >
                       Blocked
                     </Typography>
-                    <SelectedListItem tasks={tasksData}/>
+                    <SelectedListItem tasks={tasksData} />
                   </Item>
                 </Grid>
                 <Grid item xs={3}>
@@ -116,7 +117,7 @@ export const ControlledAccordions = () => {
                     >
                       Rejected
                     </Typography>
-                    <SelectedListItem tasks={tasksData}/>
+                    <SelectedListItem tasks={tasksData} />
                   </Item>
                 </Grid>
               </Grid>

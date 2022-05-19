@@ -2,6 +2,7 @@ import { useMemo } from "react";
 import FormControl, { useFormControl } from "@mui/material/FormControl";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import FormHelperText from "@mui/material/FormHelperText";
+import { InputLabel } from "@mui/material";
 
 function MyFormHelperText({ helper }) {
   const { focused } = useFormControl() || {};
@@ -22,31 +23,24 @@ function MyFormHelperText({ helper }) {
 export default function UseFormControl({
   handleChange,
   inputName,
+  inputType,
   inputValue,
   helper,
   label,
-  placeholder,
-  textColor
+  textColor,
 }) {
   return (
-    <FormControl
-      sx={{ width: "100%" }}
-      md={{ width: "100%" }}
-      variant="standard"
-      color="primary"
-    >
+    <FormControl sx={{ width: "100%" }} variant="outlined">
+      <InputLabel style={{ color: "#737679" }}>{label}</InputLabel>
       <OutlinedInput
-        sx={{ width: "100%" }}
-        md={{ width: "100%" }}
-        placeholder={placeholder}
-        label={label}
-        color="secondary"
-        name={inputName}
+        id="email"
+        type={inputType}
         value={inputValue}
+        name={inputName}
+        color="secondary"
         onChange={(e) => handleChange(e)}
-        variant="outlined"
-        autoComplete="new-password"
         style={{ color: textColor }}
+        label={label}
       />
       <MyFormHelperText helper={helper} />
     </FormControl>

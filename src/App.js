@@ -1,15 +1,33 @@
 import "./App.css";
-import injectContext from "./store/appContext";
+import injectContext, { Context } from "./store/appContext";
 import CssBaseline from "@mui/material/CssBaseline";
 import { Container } from "@mui/material";
-import { BrowserRouter, Outlet, Route, Routes } from "react-router-dom";
+import {
+  BrowserRouter,
+  Outlet,
+  Route,
+  Routes,
+  useNavigate,
+} from "react-router-dom";
 import { Login } from "./views/login";
 import { MainMenu } from "./components/menu/menu";
 import { Home } from "./views/home";
 import { Devs } from "./views/admin/devs";
 import { TaskBuilder } from "./views/admin/taskbuilder";
+import { useContext, useEffect } from "react";
 
-function Dashboard() {
+const Dashboard = () => {
+  const { actions } = useContext(Context);
+  const navigate = useNavigate();
+  useEffect(() => {
+    const auth = JSON.parse(sessionStorage.getItem("auth"));
+    if (!auth) {
+      navigate("/");
+    } else {
+      actions.revalidate(auth);
+    }
+  }, []);
+
   return (
     <>
       <MainMenu />
@@ -20,7 +38,7 @@ function Dashboard() {
       <Outlet />
     </>
   );
-}
+};
 
 const App = () => {
   return (

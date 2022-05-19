@@ -35,6 +35,7 @@ export const InputPassword = ({ handleChange, inputValue, inputName }) => {
         type={values.showPassword ? "text" : "password"}
         value={inputValue}
         name={inputName}
+        color="secondary"
         onChange={(e) => handleChange(e)}
         endAdornment={
           <InputAdornment position="end">

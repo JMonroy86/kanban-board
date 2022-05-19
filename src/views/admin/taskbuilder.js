@@ -5,10 +5,11 @@ import AddCircleOutlineSharpIcon from "@mui/icons-material/AddCircleOutlineSharp
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 import { DevsTable } from "./components/devsTable";
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { CreateDevModal } from "./components/createDev";
 import { SelectVariants } from "../../components/form/selectInput";
 import { ControlledAccordions } from "../../components/accordion/simpleAccordion";
+import { Context } from "../../store/appContext";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: "#fff0",
@@ -35,15 +36,10 @@ theme.typography.h3 = {
 };
 
 export const TaskBuilder = () => {
-  const [open, setOpen] = useState(false);
-  const [urlAvatar, setUrlAvatar] = useState("");
-  const handleOpen = () => {
-    let randomId = Math.floor(Math.random() * (50 - 0)) + 0;
-    setUrlAvatar(`https://i.pravatar.cc/150?img=${randomId}`);
-    setOpen(true);
-  };
-  const handleClose = () => setOpen(false);
-
+  const { actions } = useContext(Context);
+  useEffect(() => {
+    actions.getAllDevs();
+  }, []);
   return (
     <ThemeProvider theme={theme}>
       <Grid container spacing={1}>
@@ -61,8 +57,8 @@ export const TaskBuilder = () => {
           <ControlledAccordions />
         </Grid>
       </Grid>
-
-      <CreateDevModal open={open} handleClose={handleClose} url={urlAvatar} />
+      {/* 
+      <CreateDevModal open={open} handleClose={handleClose} url={urlAvatar} /> */}
     </ThemeProvider>
   );
 };
