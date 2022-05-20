@@ -7,7 +7,7 @@ import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { useState } from "react";
 
-export const InputPassword = ({ handleChange, inputValue, inputName }) => {
+export const InputPassword = ({ handleChange, inputValue, inputName, color }) => {
   const [values, setValues] = useState({
     showPassword: false,
   });
@@ -31,7 +31,6 @@ export const InputPassword = ({ handleChange, inputValue, inputName }) => {
         Password
       </InputLabel>
       <OutlinedInput
-        id="outlined-adornment-password"
         type={values.showPassword ? "text" : "password"}
         value={inputValue}
         name={inputName}
@@ -53,7 +52,7 @@ export const InputPassword = ({ handleChange, inputValue, inputName }) => {
             </IconButton>
           </InputAdornment>
         }
-        style={{ color: "#fff" }}
+        style={{ color: color }}
         label="Password"
       />
     </FormControl>

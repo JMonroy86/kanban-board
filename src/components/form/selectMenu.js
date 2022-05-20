@@ -4,16 +4,16 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 
-export const InputSelect = ({ handleChange, rol, rolToUpdate }) => {
+export const InputSelect = ({ handleChange, rol, rolToUpdate, label}) => {
   return (
     <Box sx={{ minWidth: 120 }}>
       <FormControl fullWidth>
-        <InputLabel id="demo-simple-select-label">Rol</InputLabel>
+        <InputLabel id="demo-simple-select-label">{label}</InputLabel>
         <Select
           labelId="demo-simple-select-label"
           id="demo-simple-select"
           value={rolToUpdate}
-          label="Rol"
+          label={label}
           onChange={handleChange}
         >
           <MenuItem value={rolToUpdate}>

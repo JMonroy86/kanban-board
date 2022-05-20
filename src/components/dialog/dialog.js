@@ -16,7 +16,14 @@ const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export const DialogAlert = ({ userId, handleClose, setOpen, open }) => {
+export const DialogAlert = ({
+  userId,
+  handleClose,
+  setOpen,
+  open,
+  path,
+  taskId,
+}) => {
   const [dev, setDev] = useState(null);
   const { store, actions } = useContext(Context);
   const [loading, setLoading] = useState(false);
@@ -27,9 +34,9 @@ export const DialogAlert = ({ userId, handleClose, setOpen, open }) => {
   useEffect(() => {
     const getUserToUpdate = async () => {
       try {
-        if (userId !== null) {
+        if (userId) {
           const res = await axios.get(
-            `http://localhost:5000/api/users/${userId}`,
+            `${process.env.REACT_APP_API_URL}/api/users/${userId}`,
             {
               headers: {
                 Authorization: `Bearer ${store.currentUser?.accessToken}`,
@@ -58,7 +65,7 @@ export const DialogAlert = ({ userId, handleClose, setOpen, open }) => {
       setMessage("Please wait a little bit, we're trying to delete the user");
       setSeverity("info");
       const res = await axios.delete(
-        `http://localhost:5000/api/users/${userId}`,
+        `${process.env.REACT_APP_API_URL}/api/${path}/${userId ? userId : taskId}`,
         {
           headers: {
             Authorization: `Bearer ${store.currentUser?.accessToken}`,
@@ -71,9 +78,10 @@ export const DialogAlert = ({ userId, handleClose, setOpen, open }) => {
         setMessage(res.data.message);
         setSeverity("success");
       }, 3000);
-      setTimeout(() => {
+      setTimeout(async() => {
         handleClose();
-        actions.getAllUsers();
+        await actions.getAllUsers();
+        await actions.getAllTasks();
       }, 3500);
     } catch (error) {
       setOpenSnack(true);
@@ -91,35 +99,37 @@ export const DialogAlert = ({ userId, handleClose, setOpen, open }) => {
         aria-describedby="alert-dialog-slide-description"
       >
         <DialogTitle sx={{ backgroundColor: "#333", color: "#fff" }}>
-          {"Are you sure to delete this user?"}
+          {`Are you sure to delete this ${userId ? 'user' : 'task'}?`}
         </DialogTitle>
         <DialogContent sx={{ backgroundColor: "#333" }}>
           <Box sx={{ flexGrow: 1 }}>
-            <Grid container spacing={6}>
-              <Grid item xs={4}>
-                <ImageAvatars url={dev?.urlAvatar} width={100} height={100} />
-              </Grid>
-              <Grid item xs={8} paddingTop={1}>
-                <Grid item xs={12}>
-                  <DialogContentText
-                    id="alert-dialog-slide-description"
-                    color={"#999"}
-                    fontSize={"1.3rem"}
-                  >
-                    {dev?.name}
-                  </DialogContentText>
+            {userId && (
+              <Grid container spacing={6}>
+                <Grid item xs={4}>
+                  <ImageAvatars url={dev?.urlAvatar} width={100} height={100} />
                 </Grid>
-                <Grid item xs={12}>
-                  <DialogContentText
-                    id="alert-dialog-slide-description"
-                    color={"#999"}
-                    fontSize={"1rem"}
-                  >
-                    {dev?.email}
-                  </DialogContentText>
+                <Grid item xs={8} paddingTop={1}>
+                  <Grid item xs={12}>
+                    <DialogContentText
+                      id="alert-dialog-slide-description"
+                      color={"#999"}
+                      fontSize={"1.3rem"}
+                    >
+                      {dev?.name}
+                    </DialogContentText>
+                  </Grid>
+                  <Grid item xs={12}>
+                    <DialogContentText
+                      id="alert-dialog-slide-description"
+                      color={"#999"}
+                      fontSize={"1rem"}
+                    >
+                      {dev?.email}
+                    </DialogContentText>
+                  </Grid>
                 </Grid>
               </Grid>
-            </Grid>
+            )}
           </Box>
         </DialogContent>
         <DialogActions sx={{ backgroundColor: "#333" }}>

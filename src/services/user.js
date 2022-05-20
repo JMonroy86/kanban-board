@@ -2,26 +2,43 @@ import axios from "axios";
 
 export const signUp = async () => {
   try {
-    const res = await axios.post("http://localhost:5000/api/auth/signUp");
+    const res = await axios.post(`${process.env.REACT_APP_API_URL}/api/auth/signUp`);
     return res.data;
   } catch (error) {
     throw error;
+  }
+};
+export const createPsw = async (formData) => {
+  try {
+    const res = await axios.post(
+      `${process.env.REACT_APP_API_URL}/api/auth/createPsw`,
+      formData,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          
+        },
+      }
+    );
+    return res.data;
+  } catch (error) {
+    return error;
   }
 };
 export const signIn = async (formData) => {
   try {
     const res = await axios.post(
-      "http://localhost:5000/api/auth/signIn",
+      `${process.env.REACT_APP_API_URL}/api/auth/signIn`,
       formData
     );
     return res.data;
   } catch (error) {
-    throw error;
+    return error;
   }
 };
 export const createUser = async (formData, token) => {
   try {
-    const res = await axios.post("http://localhost:5000/api/users", formData, {
+    const res = await axios.post(`${process.env.REACT_APP_API_URL}/api/users`, formData, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
@@ -35,7 +52,7 @@ export const createUser = async (formData, token) => {
 export const updateDev = async (formData, token) => {
   try {
     const res = await axios.put(
-      `http://localhost:5000/api/users/${formData.id}`,
+      `${process.env.REACT_APP_API_URL}/api/users/${formData.id}`,
       formData,
       {
         headers: {
@@ -52,7 +69,7 @@ export const updateDev = async (formData, token) => {
 
 export const getAllUsers = async (token) => {
   try {
-    const res = await axios.get("http://localhost:5000/api/users/", {
+    const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/users/`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -64,27 +81,24 @@ export const getAllUsers = async (token) => {
 };
 export const getAllDevs = async (token) => {
   try {
-    const res = await axios.get("http://localhost:5000/api/users/devs/", {
+    const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/users/devs/`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     });
     return res.data;
   } catch (error) {
-    throw  error;
+    throw error;
   }
 };
 
 export const getOneUser = async (id, token) => {
   try {
-    const res = await axios.get(
-      `http://localhost:5000/api/users/filter/${id}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/tickets/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     return res.data;
   } catch (error) {
     throw error;

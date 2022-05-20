@@ -10,6 +10,8 @@ import { Context } from "../store/appContext";
 import { CustomizedSnackbars } from "../components/alerts/snackbar";
 import axios from "axios";
 import { ClickableChips } from "../components/chip/chipClickable";
+import { Typography } from "@mui/material";
+import { FormDialog } from "./createPsw";
 
 const theme = createTheme({});
 
@@ -18,6 +20,8 @@ export const Login = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
+  const [openDialog, setOpenDialog] = useState(false);
+
   const [message, setMessage] = useState("");
   const [severity, setSeverity] = useState("");
   const [admin, setAdmin] = useState(null);
@@ -25,14 +29,14 @@ export const Login = () => {
     email: "",
     password: "",
   });
-  
+
   const handleChange = (e) => {
     setState({ ...state, [e.target.name]: e.target.value });
   };
 
   useEffect(() => {
     const getAdmin = async () => {
-      const res = await axios.get("http://localhost:5000/api/users/admin", {
+      const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/users/admin`, {
         headers: {
           Authorization: `Bearer ${store.currentUser?.accessToken}`,
         },
@@ -62,6 +66,10 @@ export const Login = () => {
     setTimeout(() => {
       setLoading(false);
     }, 3000);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
   };
   return (
     <>
@@ -121,6 +129,7 @@ export const Login = () => {
                   handleChange={handleChange}
                   inputValue={state.password}
                   inputName={"password"}
+                  color={'#fff'}
                 />
               </Grid>
               <Grid item xs={12} md={12} marginTop={2}>
@@ -129,6 +138,18 @@ export const Login = () => {
                   text={"Login"}
                   icon={"login"}
                 />
+              </Grid>
+              <Grid item xs={12} md={12} paddingTop={4} textAlign={'center'}>
+                <Typography
+                  sx={{
+                    color: "#ed6c02",
+                    fontFamily: "Roboto Mono",
+                    fontSize: "1rem",
+                  }}
+                  onClick={()=>setOpenDialog(true)}
+                >
+                  Click here to create your password
+                </Typography>
               </Grid>
             </Box>
           </Box>
@@ -140,6 +161,7 @@ export const Login = () => {
         severity={severity}
         message={message}
       />
+      <FormDialog handleClose={handleClose} open={openDialog}/>
     </>
   );
 };

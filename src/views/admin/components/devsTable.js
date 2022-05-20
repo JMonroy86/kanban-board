@@ -143,7 +143,7 @@ export const DevsTable = () => {
           }}
         />
         <UpdateDevModal open={open} handleClose={handleClose} userId={id} />
-        <DialogAlert open={openDelete} handleClose={CloseDelete} userId={id} />
+        <DialogAlert open={openDelete} handleClose={CloseDelete} userId={id} path={'users'} />
       </Paper>
     </>
   );

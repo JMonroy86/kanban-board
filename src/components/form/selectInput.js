@@ -48,7 +48,7 @@ export const SelectVariants = () => {
           <MenuItem
             value=""
             onClick={() => {
-              actions.getAllDevs();
+              actions.getAllTasks();
             }}
           >
             <em>None</em>

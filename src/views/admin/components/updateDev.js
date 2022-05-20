@@ -59,7 +59,7 @@ export const UpdateDevModal = ({ open, handleClose, userId }) => {
       try {
         if (userId !== null) {
           const res = await axios.get(
-            `http://localhost:5000/api/users/${userId}`,
+            `${process.env.REACT_APP_API_URL}/api/users/${userId}`,
             {
               headers: {
                 Authorization: `Bearer ${store.currentUser?.accessToken}`,
