@@ -9,7 +9,8 @@ import UseFormControl from "../../../components/form/inputText";
 import { LoadingButtonsTransition } from "../../../components/form/button";
 import { ImageAvatars } from "../../../components/avatars/avatar";
 import { InputSelect } from "../../../components/form/selectMenu";
-import { createUser } from "../../../services/user";
+import { createUser, updateDev } from "../../../services/user";
+import axios from "axios";
 
 const style = {
   position: "absolute",
@@ -24,14 +25,14 @@ const style = {
   flexGrow: 1,
 };
 
-export const CreateDevModal = ({ open, handleClose, url }) => {
+export const UpdateDevModal = ({ open, handleClose, userId }) => {
   const { store, actions } = useContext(Context);
   const [loading, setLoading] = useState(false);
   const [state, setState] = useState({
     email: "",
     name: "",
     urlAvatar: "",
-    rol: "",
+    rol: 0,
   });
 
   const handleChange = (e) => {
@@ -44,21 +45,43 @@ export const CreateDevModal = ({ open, handleClose, url }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    await createUser(state, store.currentUser.accessToken);
+    await updateDev(state, store.currentUser.accessToken);
     setState({ email: "", name: "", urlAvatar: "", rol: "" });
     setTimeout(function () {
-      actions.getAllUsers()
+      actions.getAllUsers();
       setLoading(false);
       handleClose();
     }, 3000);
   };
 
   useEffect(() => {
-    setState({ ...state, urlAvatar: url });
-  }, [url]);
-  useEffect(()=>{
-    actions.getRols()
-  },[])
+    const getUserToUpdate = async () => {
+      try {
+        if (userId !== null) {
+          const res = await axios.get(
+            `${process.env.REACT_APP_API_URL}/api/users/${userId}`,
+            {
+              headers: {
+                Authorization: `Bearer ${store.currentUser?.accessToken}`,
+              },
+            }
+          );
+          const { id, email, name, photo, rols } = res.data;
+          setState({
+            id: id,
+            email: email,
+            name: name,
+            urlAvatar: photo,
+            rol: rols.id,
+          });
+          actions.getRols();
+        }
+      } catch (error) {
+        throw error;
+      }
+    };
+    getUserToUpdate();
+  }, [userId]);
 
   return (
     <div>
@@ -119,13 +142,14 @@ export const CreateDevModal = ({ open, handleClose, url }) => {
                 <Grid item sm={6} xs={6} md={12} marginBottom={2}>
                   <InputSelect
                     handleChange={handleSelectChange}
+                    rolToUpdate={state.rol}
                     rol={store.rols}
                   />
                 </Grid>
                 <Grid item sm={12} xs={12} md={12} marginTop={2}>
                   <LoadingButtonsTransition
                     loading={loading}
-                    text={"Save"}
+                    text={"Update"}
                     icon={"save"}
                   />
                 </Grid>

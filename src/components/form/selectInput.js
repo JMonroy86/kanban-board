@@ -2,7 +2,7 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Context } from "../../store/appContext";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
 
@@ -13,6 +13,11 @@ export const SelectVariants = () => {
   const handleChange = (event) => {
     setDev(event.target.value);
   };
+
+  useEffect(() => {
+    actions.getAllDevs();
+    actions.getAllTagsUsers();
+  }, []);
 
   return (
     <div>
@@ -30,7 +35,7 @@ export const SelectVariants = () => {
           id="demo-simple-select-standard-label"
           sx={{ color: "warning.main" }}
         >
-          <FilterAltIcon fontSize={"small"}/> 
+          <FilterAltIcon fontSize={"small"} />
         </InputLabel>
         <Select
           labelId="demo-simple-select-standard-label"
@@ -40,11 +45,26 @@ export const SelectVariants = () => {
           label="dev"
           sx={{ color: "warning.main" }}
         >
-          <MenuItem value="">
+          <MenuItem
+            value=""
+            onClick={() => {
+              actions.getAllTasks();
+            }}
+          >
             <em>None</em>
           </MenuItem>
-          {store.devs.map((dev, i) => {
-            return <MenuItem value={dev.name}>{dev.name}</MenuItem>;
+          {store.devsTags.map((dev) => {
+            return (
+              <MenuItem
+                key={dev.id}
+                value={dev.name}
+                onClick={() => {
+                  actions.filterUsers(dev.id);
+                }}
+              >
+                {dev.name}
+              </MenuItem>
+            );
           })}
         </Select>
       </FormControl>

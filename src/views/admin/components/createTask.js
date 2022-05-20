@@ -7,9 +7,9 @@ import Fade from "@mui/material/Fade";
 import { Grid } from "@mui/material";
 import UseFormControl from "../../../components/form/inputText";
 import { LoadingButtonsTransition } from "../../../components/form/button";
-import { ImageAvatars } from "../../../components/avatars/avatar";
 import { InputSelect } from "../../../components/form/selectMenu";
-import { createUser } from "../../../services/user";
+import moment from "moment";
+import { createTask } from "../../../services/tasks";
 
 const style = {
   position: "absolute",
@@ -24,41 +24,48 @@ const style = {
   flexGrow: 1,
 };
 
-export const CreateDevModal = ({ open, handleClose, url }) => {
+export const CreateTaskModal = ({ open, handleClose }) => {
   const { store, actions } = useContext(Context);
   const [loading, setLoading] = useState(false);
   const [state, setState] = useState({
-    email: "",
-    name: "",
-    urlAvatar: "",
-    rol: "",
+    title: "",
+    assignedId: "",
   });
 
   const handleChange = (e) => {
     setState({ ...state, [e.target.name]: e.target.value });
   };
   const handleSelectChange = (e) => {
-    setState({ ...state, rol: e.target.value });
+    setState({ ...state, assignedId: e.target.value });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const { title, assignedId } = state;
     setLoading(true);
-    await createUser(state, store.currentUser.accessToken);
-    setState({ email: "", name: "", urlAvatar: "", rol: "" });
-    setTimeout(function () {
-      actions.getAllUsers()
+    const data = {
+      title: title,
+      creatorId: store.currentUser?.id,
+      createdDate: moment().format(),
+      assignedDate: moment().format(),
+      assignedId: assignedId,
+      statusId: 1,
+    };
+    await createTask(data, store.currentUser.accessToken);
+    setState({
+      title: "",
+      assignedId: "",
+    });
+    setTimeout(async () => {
+      await actions.getAllTasks();
       setLoading(false);
       handleClose();
     }, 3000);
   };
 
   useEffect(() => {
-    setState({ ...state, urlAvatar: url });
-  }, [url]);
-  useEffect(()=>{
-    actions.getRols()
-  },[])
+    actions.getAllStatus();
+  }, []);
 
   return (
     <div>
@@ -81,47 +88,29 @@ export const CreateDevModal = ({ open, handleClose, url }) => {
             m="auto"
             onSubmit={(e) => handleSubmit(e)}
           >
-            <Grid container spacing={2} justifyContent="center">
-              <Grid
-                item
-                sm={6}
-                xs={6}
-                md={5}
-                marginBottom={2}
-                marginTop={4}
-                justifyContent="center"
-              >
-                <ImageAvatars url={state.urlAvatar} width={200} height={200} />
+            <Grid container spacing={2} justifyContent="left">
+              <Grid item xs={6} md={6} marginBottom={2}>
+                <InputSelect
+                  label={"Dev"}
+                  handleChange={handleSelectChange}
+                  rol={store.devs}
+                />
               </Grid>
-              <Grid item sm={6} xs={6} md={6} marginBottom={2} marginTop={2}>
-                <Grid item sm={6} xs={6} md={12} marginBottom={2}>
+
+              <Grid item xs={6} md={12} marginBottom={2} marginTop={2}>
+                <Grid item xs={6} md={12} marginBottom={2}>
                   <UseFormControl
                     handleChange={handleChange}
-                    inputName={"name"}
+                    inputName={"title"}
                     inputType={"text"}
                     helper={"e.g.: Jhon Doe"}
-                    inputValue={state.name}
-                    placeholder={"Name"}
-                    label={"Name"}
+                    inputValue={state.title}
+                    placeholder={"Task Description"}
+                    label={"Task Description"}
                     textColor={"#000"}
                   />
                 </Grid>
-                <Grid item sm={6} xs={6} md={12} marginBottom={2}>
-                  <UseFormControl
-                    handleChange={handleChange}
-                    inputName={"email"}
-                    helper={"e.g.: jhondoe@mydnadigital.com"}
-                    inputValue={state.email}
-                    placeholder={"Email"}
-                    label={"Email"}
-                  />
-                </Grid>
-                <Grid item sm={6} xs={6} md={12} marginBottom={2}>
-                  <InputSelect
-                    handleChange={handleSelectChange}
-                    rol={store.rols}
-                  />
-                </Grid>
+
                 <Grid item sm={12} xs={12} md={12} marginTop={2}>
                   <LoadingButtonsTransition
                     loading={loading}
