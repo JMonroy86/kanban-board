@@ -46,7 +46,7 @@ export const createUser = async (formData, token) => {
     });
     return res.data;
   } catch (error) {
-    throw error;
+    return error;
   }
 };
 export const updateDev = async (formData, token) => {
@@ -63,7 +63,7 @@ export const updateDev = async (formData, token) => {
     );
     return res.data;
   } catch (error) {
-    throw error;
+    return error;
   }
 };
 

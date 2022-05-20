@@ -2,12 +2,14 @@ import axios from "axios";
 
 export const getAllTasks = async (token) => {
   try {
-    const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/tickets/`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    console.log(res)
+    const res = await axios.get(
+      `${process.env.REACT_APP_API_URL}/api/tickets/`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
     if (res.data === "") {
       return [];
     } else {
@@ -32,7 +34,7 @@ export const createTask = async (formData, token) => {
     );
     return res.data;
   } catch (error) {
-    throw error;
+    return error;
   }
 };
 
@@ -50,6 +52,6 @@ export const updateTask = async (formData, token, taskId) => {
     );
     return res.data;
   } catch (error) {
-    throw error;
+    return error;
   }
 };

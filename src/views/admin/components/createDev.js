@@ -10,6 +10,7 @@ import { LoadingButtonsTransition } from "../../../components/form/button";
 import { ImageAvatars } from "../../../components/avatars/avatar";
 import { InputSelect } from "../../../components/form/selectMenu";
 import { createUser } from "../../../services/user";
+import { CustomizedSnackbars } from "../../../components/alerts/snackbar";
 
 const style = {
   position: "absolute",
@@ -27,6 +28,9 @@ const style = {
 export const CreateDevModal = ({ open, handleClose, url }) => {
   const { store, actions } = useContext(Context);
   const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState("");
+  const [severity, setSeverity] = useState("");
+  const [openSnack, setOpenSnack] = useState(false);
   const [state, setState] = useState({
     email: "",
     name: "",
@@ -44,21 +48,32 @@ export const CreateDevModal = ({ open, handleClose, url }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    await createUser(state, store.currentUser.accessToken);
-    setState({ email: "", name: "", urlAvatar: "", rol: "" });
-    setTimeout(function () {
-      actions.getAllUsers()
+    const res = await createUser(state, store.currentUser.accessToken);
+    if (res.response) {
       setLoading(false);
-      handleClose();
-    }, 3000);
+      setOpenSnack(true);
+      setMessage(res.response.data.message);
+      setSeverity("error");
+    } else {
+      setOpenSnack(true);
+      setMessage(res.message);
+      setSeverity("success");
+
+      setState({ email: "", name: "", urlAvatar: "", rol: "" });
+      setTimeout(function () {
+        actions.getAllUsers();
+        setLoading(false);
+        handleClose();
+      }, 3000);
+    }
   };
 
   useEffect(() => {
     setState({ ...state, urlAvatar: url });
   }, [url]);
-  useEffect(()=>{
-    actions.getRols()
-  },[])
+  useEffect(() => {
+    actions.getRols();
+  }, []);
 
   return (
     <div>
@@ -134,6 +149,12 @@ export const CreateDevModal = ({ open, handleClose, url }) => {
           </Box>
         </Fade>
       </Modal>
+      <CustomizedSnackbars
+        open={openSnack}
+        setOpen={setOpenSnack}
+        severity={severity}
+        message={message}
+      />
     </div>
   );
 };
