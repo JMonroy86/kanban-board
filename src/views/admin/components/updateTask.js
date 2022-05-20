@@ -14,6 +14,7 @@ import axios from "axios";
 import { ImageAvatars } from "../../../components/avatars/avatar";
 import { red } from "@mui/material/colors";
 import { DialogAlert } from "../../../components/dialog/dialog";
+import { CustomizedSnackbars } from "../../../components/alerts/snackbar";
 
 const style = {
   position: "absolute",
@@ -33,7 +34,10 @@ export const UpdateTaskModal = ({ open, handleClose, taskId }) => {
   const [loading, setLoading] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
   const [id, setId] = useState(null);
-  const [status, setStatus] = useState([])
+  const [status, setStatus] = useState([]);
+  const [message, setMessage] = useState("");
+  const [severity, setSeverity] = useState("");
+  const [openSnack, setOpenSnack] = useState(false);
   const [state, setState] = useState({
     id: "",
     creator: "",
@@ -45,7 +49,7 @@ export const UpdateTaskModal = ({ open, handleClose, taskId }) => {
   useEffect(() => {
     actions.getAllStatus();
     const filteredStatus = store.status?.filter((item) => item.id !== 1);
-    setStatus(filteredStatus)
+    setStatus(filteredStatus);
   }, []);
 
   useEffect(() => {
@@ -97,15 +101,26 @@ export const UpdateTaskModal = ({ open, handleClose, taskId }) => {
       assignedId: assignedId,
       statusId: store.currentUser?.rolsId !== 2 ? 1 : statusId,
     };
-    await updateTask(data, store.currentUser.accessToken, taskId);
-    setState({
-      assignedId: "",
-    });
-    setTimeout(async () => {
-      await actions.getAllTasks();
+    const res = await updateTask(data, store.currentUser.accessToken, taskId);
+    console.log(res)
+    if (res.response) {
       setLoading(false);
-      handleClose();
-    }, 3000);
+      setOpenSnack(true);
+      setMessage(res.response.data.message);
+      setSeverity("error");
+    } else {
+      setOpenSnack(true);
+      setMessage(res.message);
+      setSeverity("success");
+      setState({
+        assignedId: "",
+      });
+      setTimeout(async () => {
+        await actions.getAllTasks();
+        setLoading(false);
+        handleClose();
+      }, 3000);
+    }
   };
 
   const CloseDelete = () => setOpenDelete(false);
@@ -282,6 +297,12 @@ export const UpdateTaskModal = ({ open, handleClose, taskId }) => {
         handleClose={CloseDelete}
         taskId={id}
         path={"tickets"}
+      />
+      <CustomizedSnackbars
+        open={openSnack}
+        setOpen={setOpenSnack}
+        severity={severity}
+        message={message}
       />
     </div>
   );

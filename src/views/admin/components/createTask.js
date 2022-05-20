@@ -10,6 +10,7 @@ import { LoadingButtonsTransition } from "../../../components/form/button";
 import { InputSelect } from "../../../components/form/selectMenu";
 import moment from "moment";
 import { createTask } from "../../../services/tasks";
+import { CustomizedSnackbars } from "../../../components/alerts/snackbar";
 
 const style = {
   position: "absolute",
@@ -27,6 +28,9 @@ const style = {
 export const CreateTaskModal = ({ open, handleClose }) => {
   const { store, actions } = useContext(Context);
   const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState("");
+  const [severity, setSeverity] = useState("");
+  const [openSnack, setOpenSnack] = useState(false);
   const [state, setState] = useState({
     title: "",
     assignedId: "",
@@ -51,16 +55,26 @@ export const CreateTaskModal = ({ open, handleClose }) => {
       assignedId: assignedId,
       statusId: 1,
     };
-    await createTask(data, store.currentUser.accessToken);
-    setState({
-      title: "",
-      assignedId: "",
-    });
-    setTimeout(async () => {
-      await actions.getAllTasks();
+    const res = await createTask(data, store.currentUser.accessToken);
+    if (res.response) {
       setLoading(false);
-      handleClose();
-    }, 3000);
+      setOpenSnack(true);
+      setMessage(res.response.data.message);
+      setSeverity("error");
+    } else {
+      setOpenSnack(true);
+      setMessage(res.message);
+      setSeverity("success");
+      setState({
+        title: "",
+        assignedId: "",
+      });
+      setTimeout(async () => {
+        await actions.getAllTasks();
+        setLoading(false);
+        handleClose();
+      }, 3000);
+    }
   };
 
   useEffect(() => {
@@ -123,6 +137,12 @@ export const CreateTaskModal = ({ open, handleClose }) => {
           </Box>
         </Fade>
       </Modal>
+      <CustomizedSnackbars
+        open={openSnack}
+        setOpen={setOpenSnack}
+        severity={severity}
+        message={message}
+      />
     </div>
   );
 };

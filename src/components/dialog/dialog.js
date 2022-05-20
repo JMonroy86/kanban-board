@@ -26,7 +26,6 @@ export const DialogAlert = ({
 }) => {
   const [dev, setDev] = useState(null);
   const { store, actions } = useContext(Context);
-  const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [severity, setSeverity] = useState("");
   const [openSnack, setOpenSnack] = useState(false);
