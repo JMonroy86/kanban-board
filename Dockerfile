@@ -12,7 +12,7 @@ RUN chmod 755 /usr/local/bin/init.sh
 
 CMD ["/usr/sbin/sshd","-D"]
 
-FROM node:12
+FROM node:14
 
 RUN mkdir /app
 
